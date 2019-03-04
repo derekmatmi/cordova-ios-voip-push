@@ -46,10 +46,16 @@
 
     NSString *message = payloadDict[@"alert"];
     NSLog(@"[objC] received VoIP msg: %@", message);
+  
+    NSDictionary *payloadCustomDict = payload.dictionaryPayload[@"custom"];
+    NSLog(@"[objC] didReceiveIncomingPushWithCustomPayload: %@", payloadCustomDict);
+  
+    NSDictionary *payloadDataDict = payloadCustomDict[@"a"];
+    NSLog(@"[objC] didReceiveIncomingPushWithDataPayload: %@", payloadDataDict);
 
     NSMutableDictionary* results = [NSMutableDictionary dictionaryWithCapacity:2];
-    [results setObject:message forKey:@"function"];
-    [results setObject:@"someOtherDataForField" forKey:@"someOtherField"];
+    [results setObject:message forKey:@"message"];
+    [results setObject:payloadDataDict forKey:@"data"];
     
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:results];
     [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
